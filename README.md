@@ -5,7 +5,7 @@
 ## API & Routing
 - FastAPI Framework
 ## Database
-- SQLite
+- SQLite3, SQLAlchemy ORM
 
 ## Excluded
 - Frontend elements (templates / stylesheets / assets) mostly sourced.

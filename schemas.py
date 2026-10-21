@@ -1,7 +1,7 @@
-from pydantic import BaseModel, ConfigDict, Field
+from datetime import datetime
+from pydantic import BaseModel, ConfigDict, Field, EmailStr
 
 class MovieBase(BaseModel):
-    id: int   
     title: str = Field(min_length=1, max_length=100)
     director: str = Field(min_length=1, max_length=100)
     year: int
@@ -36,13 +36,29 @@ class MovieUpdate(MovieBase):
     genre: str      | None = None
     rating: float   | None = None
 
-class MovieResponse(BaseModel):
+class MovieResponse(MovieBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-    title: str
-    director: str
-    year: int
-    runtime: int
-    genre: str
-    rating: float
+    poster_art: str | None
+    poster_art_path: str
+
+    date_added: datetime
+    likes: UserResponse
+
+class UserBase(BaseModel):
+    username: str = Field(min_length=1, max_length=15)
+    # email: EmailStr = Field(max_length=120) #need pydantic[email] validator WIP
+
+class UserCreate(UserBase):
+    pass
+
+class UserResponse(UserBase):
+    model_config = ConfigDict(from_attributes=True)
+    
+    id: int
+    profile_art: str | None
+    profile_art_path: str
+
+    date_joined: datetime
+    liked: MovieResponse
