@@ -7,4 +7,5 @@
 ## Database
 - SQLite
 
-- Frontend elements (templates / stylesheets / assets) sourced.
+## Excluded
+- Frontend elements (templates / stylesheets / assets) mostly sourced.

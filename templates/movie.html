@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+    <article class="content-section py-3 px-4 mb-4">
+        <div class="d-flex align-items-start gap-4">
+            <img class="rounded-circle article-img flex-shrink-0"
+                 src="{{ url_for('static', path='poster_pics/default.jpg') }}"
+                 alt="{{ url_for('static', path='poster_pics/default.jpg') }}'s poster"
+                 width="64"
+                 height="64"
+                 loading="lazy">
+            <div class="flex-grow-1">
+                <div class="article-metadata mb-2">
+                    <a class="me-2"
+                       href="{{ url_for('movie_page', movie_id=movie.id) }}">{{ movie.director }}</a>
+                    <small class="text-body-secondary">{{ movie.year }}</small>
+                </div>
+                <h2 class="article-title">{{ movie.title }}</h2>
+                    <p>Director: {{movie.director}}</p>
+                    <p>Year: {{movie.year}}</p>
+                    <p>Runtime: {{movie.runtime}} minutes</p>
+                    <p>Genre: {{movie.genre}}</p>
+                    <p>Rating: {{movie.rating}} / 10</p>
+                <div id="postActions" class="post-actions mt-3 pt-3 border-top d-none">
+                    <button type="button"
+                            class="btn btn-outline-secondary me-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#">Add Favourite</button>
+                    <button type="button"
+                            class="btn btn-outline-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#">Add Review</button>
+                </div>
+            </div>
+        </div>
+    </article>
+{% endblock content %}
