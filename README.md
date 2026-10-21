@@ -6,3 +6,5 @@
 - FastAPI Framework
 ## Database
 - SQLite
+
+- Frontend elements (templates / stylesheets / assets) sourced.
