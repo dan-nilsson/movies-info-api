@@ -1,19 +1,20 @@
-'''
-Movies Info Frontend and API using FastAPI, SQLite
-'''
-import json
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+
+
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
 
 from apitools import json_load
+from schemas import Movie, MovieUpdate
 
+templates = Jinja2Templates(directory='templates')
 app = FastAPI()
 movies = json_load()
 
-@app.get('/', response_class=HTMLResponse, include_in_schema=False)
-@app.get('/movies', response_class=HTMLResponse, include_in_schema=False)
-def home() -> None:
-    return f'<h1>{movies[0]}</h1>'
+@app.get('/', include_in_schema=False)
+@app.get('/movies', include_in_schema=False)
+def home(request: Request) -> None:
+    return templates.TemplateResponse(
+        request, 'home.html', {'movies': movies, 'title': 'Home'})
 
 @app.get('../api/movies')
 def get_movies() -> list:
