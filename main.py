@@ -11,7 +11,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from models import Movie, User
-from database import Base, engine, get_db
+from database import Base, engine, get_db, sqlite_connect
 from schemas import MovieBase, MovieUpdate, MovieResponse, UserCreate, UserResponse
 from routers import users, movies
 
@@ -29,10 +29,13 @@ templates = Jinja2Templates(directory='templates')
 app.include_router(users.router, prefix='/api/users', tags=['users'])
 app.include_router(movies.router, prefix='/api/movies', tags=['movies'])
 
+conn = sqlite_connect()
+
 @app.get('/', include_in_schema=False)
 @app.get('/movies', include_in_schema=False)
 def home(request: Request, db: Annoted[Session, Depends(getdb)]) -> None:
-    movies = db.execute(select(models.Movie))
+    movies = get_all_movies_sqlite()
+    # movies = db.execute(select(models.Movie))
     return templates.TemplateResponse(
         request, 'home.html', {'movies': movies, 'title': 'Home'})
 
@@ -83,8 +86,14 @@ def find_user(username: str, db: Annoted[Session, Depends(getdb)]) -> UserRespon
     raise StarletteHTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found')
 
 
-def main():
-    pass
+def get_all_movies_sqlite() -> list[dict]:
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM movies')
+    rows = cursor.fetchall()
+    movies = [row_to_dict(row, cursor) for row in rows]
+    print(movies)
+    return movies
 
-if __name__ == '__main__':
-    main()
+def row_to_dict(row, cursor):
+    columns = [column[0] for column in cursor.description]
+    return dict(zip(columns, row))

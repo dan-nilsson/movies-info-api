@@ -1,4 +1,4 @@
-import os
+import os, sqlite3
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
@@ -18,3 +18,9 @@ class Base(DeclarativeBase):
 def get_db():
     with SessionLocal() as db:
         yield db
+
+def sqlite_connect() -> Connection:
+    conn = sqlite3.connect(db_path)
+    # conn.row_factory = dict_factory
+    conn.execute('PRAGMA foreign_keys = ON')
+    return conn
