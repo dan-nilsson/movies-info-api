@@ -7,5 +7,5 @@
 ## Database
 - SQLite3, SQLAlchemy ORM
 
-## Excluded
+## Sourced
 - Frontend elements (templates / stylesheets / assets) mostly sourced.
