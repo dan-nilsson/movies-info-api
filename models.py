@@ -18,7 +18,7 @@ class User(Base):
         default=None,
     )
     date_joined: Mapped[datetime] = mapped_column(DateTime(timezone=True),default=lambda: datetime.now(UTC))
-    liked: Mapped[list[Movie]] = relationship(back_populates='likes')
+    # liked: Mapped[list[Movie]] = relationship(back_populates='likes')
 
 class Movie(Base):
     __tablename__ = 'movies'
@@ -37,4 +37,4 @@ class Movie(Base):
         default=None,
     )
     date_added: Mapped[datetime] = mapped_column(DateTime(timezone=True),default=lambda: datetime.now(UTC))
-    likes: Mapped[list[User]] = relationship(back_populates='liked')
+    # likes: Mapped[list[User]] = relationship(back_populates='liked')

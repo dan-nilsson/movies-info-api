@@ -44,17 +44,11 @@ class MovieResponse(MovieBase):
     poster_art_path: str
 
     date_added: datetime
-    likes: UserResponse
+    # likes: UserResponse
 
 class UserBase(BaseModel):
     username: str = Field(min_length=1, max_length=15)
-    # email: EmailStr = Field(max_length=120) #need pydantic[email] validator WIP
-
-class UserCreate(UserBase):
-    pass
-
-class UserUpdate(UserBase):
-    pass
+    email: EmailStr = Field(max_length=120) #need pydantic[email] validator WIP
 
 class UserResponse(UserBase):
     model_config = ConfigDict(from_attributes=True)
@@ -64,4 +58,12 @@ class UserResponse(UserBase):
     profile_art_path: str
 
     date_joined: datetime
-    liked: MovieResponse
+    # liked: MovieResponse
+
+
+class UserCreate(UserBase):
+    pass
+
+class UserUpdate(UserBase):
+    pass
+

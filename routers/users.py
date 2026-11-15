@@ -1,18 +1,18 @@
 from typing import Annotated
 
+import models
+from database import getdb
 from fastapi import APIRouter, Depends, HTTPException, status
+from schemas import MovieBase, MovieResponse, UserCreate, UserResponse, UserUpdate
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
-
-import models
-from database import get_db
-from schemas import MovieResponse, UserCreate, UserResponse, UserUpdate
+from sqlalchemy.orm import Session, selectinload
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 router = APIRouter()
 
 @router.post('', response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def create_user(user: UserCreate, db: Annoted[Session, Depends(getdb)]):
+def create_user(user: UserCreate, db: Annotated[Session, Depends(getdb)]):
     user_unique, error_type = create_user_validation(user)
     if not user_unique:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'{error_type} already exists')
@@ -26,14 +26,14 @@ def create_user(user: UserCreate, db: Annoted[Session, Depends(getdb)]):
 
 
 @router.get('', response_model=list[UserResponse], status_code=status.HTTP_200_OK)
-def get_users(db: Annoted[Session, Depends(getdb)]):
+def get_users(db: Annotated[Session, Depends(getdb)]):
     result = db.execute(select(models.User))
     return result
 
 
 @router.get('/{user_id}', response_model=UserResponse, status_code=status.HTTP_200_OK)
-def get_user(user_id: int, db: Annoted[Session, Depends(getdb)]):
-    result = db.execute(select(models.User).where(models.User.username == user.username))
+def get_user(user_id: int, db: Annotated[Session, Depends(getdb)]):
+    result = db.execute(select(models.User).where(models.User.user_id == user_id))
     user = result.scalars().first()
     if user: return user
 
@@ -51,7 +51,7 @@ def create_user_validation(user: UserCreate) -> bool:
 
     return True, 'Pass'
 
-def find_user(username: str, db: Annoted[Session, Depends(getdb)]) -> UserResponse:
+def find_user(username: str, db: Annotated[Session, Depends(getdb)]) -> UserResponse:
     result = db.execute(select(models.User).where(models.User.username == username))
     user = result.scalars().first()
     if user: return user
