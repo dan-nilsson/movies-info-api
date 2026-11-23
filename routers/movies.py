@@ -1,24 +1,24 @@
-import os
-from typing import Annotated
 
-from database import getdb
+from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
-from models import Movie
-from schemas import MovieBase, MovieCreate, MovieResponse, MovieUpdate
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session, selectinload
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from database import getdb
+from models import Movie
+from schemas import MovieBase, MovieCreate, MovieResponse, MovieUpdate
+
 router = APIRouter()
 
-@router.get('', response_model=list[MovieResponse])
-def get_movies(db: Annotated[Session, Depends(getdb)]) -> list:
+@router.get('', response_model=list[MovieResponse], status_code=status.HTTP_200_OK)
+def get_movies(db: Annotated[Session, Depends(getdb)]) -> list[MovieResponse]:
     result = db.execute(select(Movie))
     return result
 
 
-@router.get('/{movie_id}', response_model=MovieResponse)
+@router.get('/{movie_id}', response_model=MovieResponse, status_code=status.HTTP_200_OK)
 def get_movie(movie_id: int, db: Annotated[Session, Depends(getdb)]):
     return find_movie(movie_id)
 

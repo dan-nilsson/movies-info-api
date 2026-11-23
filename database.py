@@ -13,15 +13,17 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 class Base(DeclarativeBase):
     pass
+
 
 def getdb():
     with SessionLocal() as db:
         yield db
 
+
 def sqlite_connect() -> Connection:
     conn = connect(db_path)
-    # conn.row_factory = dict_factory
     conn.execute('PRAGMA foreign_keys = ON')
     return conn

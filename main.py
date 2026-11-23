@@ -1,18 +1,20 @@
 import os
-from typing import Annotated
 
-from database import Base, engine, getdb, sqlite_connect
+from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from models import Movie, User
-from routers import movies, users
-from schemas import MovieResponse, MovieUpdate, UserCreate, UserResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from starlette.exceptions import HTTPException as StarletteHTTPException
+
+from database import Base, engine, getdb, sqlite_connect
+from models import Movie, User
+from routers import movies, users
+from schemas import MovieResponse, MovieCreate, MovieUpdate, UserCreate, UserResponse
+
 
 base_dir = os.path.dirname(__file__)
 static_path = os.path.join(base_dir, 'static/')
